@@ -1,0 +1,50 @@
+sequenceDiagram
+    actor User
+    participant HTML as index.html
+    participant JS_Index as js/index.js
+    participant Convert as convertHSVandRGBA
+    participant Processor as data-processor
+    participant ChartFactory as chart-factory
+    participant ChartManager as chart-manager
+    participant Display as display.js
+    participant TableDisplay as table-display
+    participant Filter as data-filter
+
+    User->>JS_Index: 画像をアップロード
+    JS_Index->>JS_Index: handleImageUpload()
+    JS_Index->>JS_Index: img.onload → extractHSV()
+    
+    loop ピクセルごと
+        JS_Index->>Convert: rgbToHsv(r, g, b)
+        Convert-->>JS_Index: HSV返却
+    end
+    
+    JS_Index->>JS_Index: HSVデータ集計・ソート
+    
+    JS_Index->>Display: displayCharts(hsvData)
+    Display->>Processor: processHSVFrequencyData()
+    Processor-->>Display: 周波数データ返却
+    
+    Display->>Processor: generateHueLabelsAndData()
+    Processor-->>Display: ラベル・データ返却
+    
+    Display->>Processor: generateSaturationLabelsAndData()
+    Display->>Processor: generateValueLabelsAndData()
+    
+    Display->>ChartFactory: createHueChart()
+    ChartFactory-->>Display: Hueチャート
+    Display->>ChartManager: setHueChart()
+    
+    Display->>ChartFactory: createSVChart()
+    Display->>ChartFactory: createSaturationChart()
+    Display->>ChartFactory: createValueChart()
+    
+    JS_Index->>TableDisplay: displayHSVData(hsvData)
+    TableDisplay->>Convert: hsvToRgb()
+    Convert-->>TableDisplay: RGB返却
+    TableDisplay->>HTML: テーブル描画
+    
+    User->>ChartFactory: Hueチャートクリック
+    ChartFactory->>Filter: filterTableByHue()
+    Filter->>TableDisplay: displayHSVData(フィルタ済みデータ)
+    TableDisplay->>HTML: テーブル再描画

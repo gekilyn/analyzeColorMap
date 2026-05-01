@@ -1,0 +1,59 @@
+graph TB
+    subgraph UI["UI層"]
+        A["index.html<br/>【HTML + スタイル】"]
+        B["css/style.css"]
+    end
+    
+    subgraph Entry["エントリーポイント"]
+        C["js/index.js<br/>【ユーザー入力 → 処理実行】<br/>handleImageUpload()<br/>extractHSV()"]
+    end
+    
+    subgraph Core["コア処理層"]
+        D["convertHSVandRGBA.js<br/>【色空間変換】<br/>rgbToHsv()<br/>hsvToRgb()"]
+    end
+    
+    subgraph Data["データ処理層"]
+        E["data-processor.js<br/>【統計計算】<br/>processHSVFrequencyData()<br/>generateLabelsAndData()"]
+        F["data-filter.js<br/>【フィルタリング】<br/>filterTableByHue()"]
+    end
+    
+    subgraph Presentation["表示層"]
+        G["display.js<br/>【統合管理】<br/>displayCharts()"]
+        H["table-display.js<br/>【テーブル表示】<br/>displayHSVData()"]
+        I["chart-factory.js<br/>【チャート生成】<br/>createXxxChart()"]
+        J["chart-manager.js<br/>【チャート管理】<br/>ChartManager"]
+    end
+    
+    subgraph External["外部ライブラリ"]
+        K["Chart.js"]
+    end
+    
+    A --> C
+    B --> A
+    C --> D
+    C --> E
+    C --> H
+    C --> G
+    
+    G --> E
+    G --> I
+    G --> J
+    
+    H --> D
+    I --> K
+    I --> F
+    
+    F --> H
+    
+    E --> D
+    
+    style A fill:#ffecb3,stroke:#ff6f00,stroke-width:2px
+    style C fill:#c8e6c9,stroke:#388e3c,stroke-width:2px
+    style D fill:#b2dfdb,stroke:#00796b,stroke-width:2px
+    style E fill:#dcedc8,stroke:#558b2f,stroke-width:2px
+    style F fill:#c5cae9,stroke:#3f51b5,stroke-width:2px
+    style G fill:#f8bbd0,stroke:#c2185b,stroke-width:2px
+    style H fill:#f8bbd0,stroke:#c2185b,stroke-width:2px
+    style I fill:#f8bbd0,stroke:#c2185b,stroke-width:2px
+    style J fill:#ffe0b2,stroke:#e65100,stroke-width:2px
+    style K fill:#e1bee7,stroke:#7b1fa2,stroke-width:2px

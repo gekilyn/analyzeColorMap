@@ -1,0 +1,54 @@
+graph TD
+    A["index.html<br/>(エントリーポイント)"]
+    
+    B["css/style.css"]
+    C["Chart.js CDN"]
+    
+    D["js/components/convertHSVandRGBA.js<br/>(rgbToHsv, hsvToRgb)"]
+    E["js/components/table-display.js<br/>(displayHSVData)"]
+    F["js/components/chart-manager.js<br/>(ChartManager)"]
+    G["js/components/data-processor.js<br/>(processHSV...)"]
+    H["js/components/chart-factory.js<br/>(createXxxChart)"]
+    I["js/components/data-filter.js<br/>(filterTableByHue)"]
+    J["js/components/display.js<br/>(displayCharts)"]
+    K["js/index.js<br/>(handleImageUpload)"]
+    
+    A --> B
+    A --> C
+    A --> D
+    A --> E
+    A --> F
+    A --> G
+    A --> H
+    A --> I
+    A --> J
+    A --> K
+    
+    K -->|画像読み込み| L["img.onload"]
+    L -->|キャンバス描画| M["extractHSV"]
+    M -->|RGB→HSV変換| D
+    M -->|HSVデータ集計| M
+    M -->|グラフ表示| J
+    M -->|テーブル表示| E
+    
+    J -->|周波数計算| G
+    J -->|ラベル・データ生成| G
+    J -->|チャート作成| H
+    J -->|チャート管理| F
+    
+    H -->|クリック時| I
+    I -->|テーブル再表示| E
+    
+    H -->|RGB変換| D
+    E -->|RGB変換| D
+    
+    style A fill:#ffecb3
+    style K fill:#c8e6c9
+    style M fill:#bbdefb
+    style J fill:#f8bbd0
+    style E fill:#f8bbd0
+    style G fill:#dcedc8
+    style H fill:#dcedc8
+    style F fill:#ffe0b2
+    style I fill:#c5cae9
+    style D fill:#b2dfdb
